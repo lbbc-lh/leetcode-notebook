@@ -27,3 +27,36 @@ class Solution {
     }
 }
 ```
+#### 509.斐波那契数（BFS）
+```
+class Solution {
+    public int fib(int n) {
+        if(n == 0) return 0;
+        if(n == 1) return 1;
+        int[] dp = new int[n+1];
+        dp[0] = 0;
+        dp[1] = 1;
+        int[] indeg = new int[n+1];//入度数组
+        Arrays.fill(indeg, 2);//定义除了0和1以外的入度都是2
+        indeg[0] = 0;
+        indeg[1] = 0;
+        Queue<Integer> queue = new LinkedList<>();//队列
+        queue.offer(0);
+        queue.offer(1);
+        while(!queue.isEmpty()){
+            int x = queue.poll();//出队操作
+            if(x == n){
+                return dp[x];
+            }
+            List<Integer> next = x == 0 ? Arrays.asList(2) : Arrays.asList(x+1,x+2);
+            for(int y : next){
+                if(y > n) continue;
+                dp[y] += dp[x];
+                indeg[y]--;//每次得到一个结果，入度-1
+                if(indeg[y] == 0) queue.offer(y);//入队，条件是如果入度为0，即在队列中的都是已知的
+            }
+        }
+        return 0;
+    }
+}
+```
